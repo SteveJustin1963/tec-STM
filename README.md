@@ -1,6 +1,4 @@
 # tec-STM
-TEC-1 scanning tunneling microscope
+this project is the TEC-1 scanning tunneling microscope
 
-
-see also 
-Scanning Electron Microscope
+There is alos https://github.com/SteveJustin1963/tec-SEM
