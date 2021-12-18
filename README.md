@@ -1,4 +1,7 @@
-# tec-STM
-this project is the much harder TEC-STM, scanning tunneling microscope 
+# tec-STM scanning tunneling microscope
 
-There is also the easier https://github.com/SteveJustin1963/tec-SEM
+this project is the much easier than TEC-SEM, https://github.com/SteveJustin1963/tec-SEM
+
+## Ref
+- https://en.wikipedia.org/wiki/Scanning_tunneling_microscope
+- 
