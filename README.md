@@ -12,6 +12,7 @@ this STM project is easier to achive than the https://github.com/SteveJustin1963
 ![image](https://user-images.githubusercontent.com/58069246/170627528-381cca0a-6224-41d8-9345-f9647f52889f.png)
 ![image](https://user-images.githubusercontent.com/58069246/170627604-4a5c36d2-6a65-4a3e-ab3e-f7d42570cc92.png)
 ![image](https://user-images.githubusercontent.com/58069246/170627637-50646f7b-8ece-45d5-92ad-e8e1f1d56c83.png)
+![image](https://user-images.githubusercontent.com/58069246/170627836-ae84c414-4153-455c-a46c-c8e1027dc55c.png)
 
 
 
@@ -21,3 +22,6 @@ this STM project is easier to achive than the https://github.com/SteveJustin1963
 - https://en.wikipedia.org/wiki/Scanning_tunneling_microscope
 - https://dberard.com/home-built-stm/
 - http://web.archive.org/web/20130815082711/http://www.geocities.com/spm_stm/Project.html
+- https://github.com/mr-kenhoff/STM
+- https://people.ece.cornell.edu/land/courses/ece4760/FinalProjects/s2002/sm242/stmdesign.htm
+- 
