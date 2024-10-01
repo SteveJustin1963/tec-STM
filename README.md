@@ -3,7 +3,7 @@
 this STM project is easier to achive than the https://github.com/SteveJustin1963/tec-SEM
 
 
-### MINT code for the STM controller.1 
+### MINT code for the STM controller-1.md
 
 explanations:
 
