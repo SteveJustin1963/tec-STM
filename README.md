@@ -1,5 +1,5 @@
 # tec-STM scanning tunneling microscope
-
+not finished work in progress
 
 ### revsied STM Controller program in MINT 2.0 , implementation is a complete framework for the STM Controller. 
 
