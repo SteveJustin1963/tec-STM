@@ -1,14 +1,6 @@
 # tec-STM scanning tunneling microscope
 
-this STM project is easier to achive than the https://github.com/SteveJustin1963/tec-SEM
-
  
-///////////////////////
-
-Certainly! I'll combine the previous code with the new implementation, fill in missing parts, and create a more comprehensive STM Controller program in MINT 2.0. 
-
-
-
 
 This comprehensive STM Controller program in MINT 2.0 combines elements from both versions and fills in missing parts. Here's a summary of the changes and additions:
 
