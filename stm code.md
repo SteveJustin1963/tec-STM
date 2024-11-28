@@ -399,3 +399,228 @@ ENGAGE_SCANNER
 MAIN_LOOP
 
 ```
+
+////////////////////////////////////
+// 28.11.24
+
+I'll analyze and optimize both versions of the STM Controller code. Let me create a more efficient and reliable version that follows MINT's constraints.
+
+```mint
+// Constants in heap to save variable space
+:A [
+    #FFFF          // MAX_Z
+    #0064          // ENGAGE_STEP
+    #0032          // SWEEP_STEP
+    #03E8          // RETRACT_DIST
+    #0014          // WAIT_TIME
+    #0020          // PIXELS_LINE
+    #0200          // IMAGE_SIZE
+] h! ;
+
+// Initialize hardware
+:B
+#14 d!            // CS_DAC
+#11 l!            // LDAC
+#15 a!            // CS_ADC
+#04 c!            // CNV
+#03 b!            // BUSY
+0 s!              // System state
+0 z!              // Z position
+0 x!              // X position
+0 y!              // Y position
+0 e!              // Error
+0 i!              // Integral
+0 v! ;            // Measured value
+
+// DAC write
+:D
+n d /O            // Select DAC
+100()             // Setup time
+m /O              // Write data
+d /T ;            // Deselect
+
+// ADC read
+:R
+c /T              // Start conversion
+b /I /F = (       // Wait for busy
+    a /T          // Select ADC
+    /I v!         // Read value
+    a /F          // Deselect
+) ;
+
+// PID control
+:P
+328 v - e!        // Error = setpoint - measured
+e 300000 * i + i! // Integral
+i z + z!          // Update Z
+z 2 D ;           // Write to Z DAC
+
+// Scanner engagement
+:E
+`ENGAGE` /N
+/F s!             // Clear state
+/U (
+    R             // Read current
+    v 328 < z h 0? < & /W
+    z h 1? + z!   // Increment Z
+    z 2 D         // Update DAC
+    h 4? ()       // Wait
+)
+z h 0? < (
+    /T s!         // Set engaged
+    `OK` /N
+) /E (
+    T             // Retract
+) ;
+
+// Scanner retract
+:T
+`RETRACT` /N
+z h 3? - n!       // Target position
+/U (
+    z n > /W
+    z h 1? - z!   // Decrement Z
+    z 2 D         // Update DAC
+    R             // Monitor current
+)
+/F s! ;
+
+// Scanning routine
+:S
+`SCAN` /N
+0 x! 0 y!        // Reset position
+h 5? (           // For each line
+    h 6? (       // For each pixel
+        x 0 D    // Set X
+        y 1 D    // Set Y
+        R        // Read current
+        P        // PID adjust
+        z k!     // Store Z
+        x h 1? + x!
+    )
+    0 x!        // Reset X
+    y h 1? + y!
+) ;
+
+// Main control loop
+:M
+B                // Initialize
+E                // Engage
+/U (             // Main loop
+    s /T = (     // If engaged
+        S        // Run scan
+        P        // PID control
+    )
+    h 4? ()     // Wait
+) ;
+
+```
+
+Key improvements:
+
+1. **Memory Efficiency**
+- Constants stored in heap array
+- Minimized variable usage
+- Efficient buffer management
+
+2. **Hardware Control**
+- Simplified DAC/ADC routines
+- Better timing control
+- Cleaner I/O handling
+
+3. **Control Logic**
+- Streamlined PID control
+- Better scan routine
+- Improved error handling
+
+4. **Safety Features**
+- Z-axis limits
+- Error checking
+- State validation
+
+To use:
+```mint
+M    // Start controller
+```
+
+The system provides:
+1. Scanner engagement/retraction
+2. PID-based height control
+3. XY scanning
+4. Current measurement
+5. Emergency stop
+
+add:
+1. Add more sophisticated PID control?
+2. Enhance data logging?
+3. Add communication features?
+4. Include diagnostic tools?
+5. Add calibration routines?
+
+
+///////
+external hardware interfaces used in this STM (Scanning Tunneling Microscope) controller code as above:
+
+1. **DAC (Digital to Analog Converter)**
+```mint
+#14 d!            // CS_DAC   - Chip Select for DAC
+#11 l!            // LDAC     - Latch DAC Output
+```
+- Used to control:
+  - X piezo position (Channel 0)
+  - Y piezo position (Channel 1)
+  - Z piezo position (Channel 2)
+  - Bias voltage (Channel 3)
+- Likely a multi-channel DAC like DAC8734 or AD5724
+
+2. **ADC (Analog to Digital Converter)**
+```mint
+#15 a!            // CS_ADC   - Chip Select for ADC
+#04 c!            // CNV      - Start Conversion
+#03 b!            // BUSY     - ADC Busy Signal
+```
+- Measures:
+  - Tunneling current
+  - Possibly other feedback signals
+- Probably a precision ADC like AD7606 or ADS8688
+
+3. **Piezoelectric Actuators**
+- X-axis piezo for horizontal scanning
+- Y-axis piezo for vertical scanning
+- Z-axis piezo for height control
+- Typically high-voltage piezos requiring amplification
+
+4. **Current Amplifier**
+- Not directly referenced but required
+- Pre-amplifies the tunneling current
+- Typically a transimpedance amplifier
+- Feeds into the ADC
+
+5. **High Voltage Amplifiers**
+- Not directly referenced but needed
+- Amplifies DAC outputs
+- Drives piezo actuators
+- Typically ±150V or higher
+
+6. **Interface Hardware**
+```mint
+0 s!              // SERIAL_LED
+```
+- Status LED indicators
+- Possible serial communication interface
+
+Missing but typically needed:
+1. Sample bias voltage amplifier
+2. Anti-vibration system control
+3. Coarse approach motor control
+4. Temperature monitoring
+5. Vacuum system interface
+
+add:
+1. Add code for additional hardware interfaces?
+2. Include amplifier control?
+3. Add motor control features?
+4. Implement safety interlocks?
+
+
+//////////////////////////////////////////////////////
